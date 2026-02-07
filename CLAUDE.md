@@ -1,133 +1,124 @@
-# Polymarket Accuracy Analysis — Critical Replication
+# Polymarket Accuracy Analysis — Critical Replication (v2)
 
-Replicating and critically examining the [Dune "How Accurate is Polymarket" dashboard](https://dune.com/alexmccullough/how-accurate-is-polymarket) by @alexmccullough using Allium's on-chain prediction market data.
+Replicating and critically examining the [Dune "How Accurate is Polymarket" dashboard](https://dune.com/alexmccullough/how-accurate-is-polymarket) by @alexmccullough using Allium's on-chain prediction market data. **v2** addresses [methodological critique](critique.md) from McCullough's perspective.
+
+## API Key
+- **Always use the local `.env` file** for the Allium API key (`ALLIUM_API_KEY`).
+- Do not use the MCP server's built-in key — it lacks access to prediction market tables.
+- Run queries via `uv run run_query.py <file.sql>` or the Allium REST API.
 
 ## Data Source
-- **Allium tables**: `polygon.predictions.markets`, `polygon.predictions.trades_enriched`, `polygon.predictions.token_prices_daily`
-- **Coverage**: 124K resolved markets, 2022-01-14 to 2026-02-07, 9 categories
+- **Allium tables**: `polygon.predictions.markets`, `polygon.predictions.trades`, `polygon.predictions.token_prices_daily`
+- **Coverage**: 108,861 resolved tokens across ~28,145 actual questions, 2022-01-14 to 2026-02-07
 - **Methodology**: McCullough's approach — market priced >50% resolving "Yes" = correct, <50% resolving "No" = correct
 
 ---
 
-## 1. Replication: Headline Accuracy by Time Horizon
+## Market Structure (Critical — Missed in v1)
 
-| Horizon | McCullough | Our Replication | N (markets) | Brier Score |
-|---------|-----------|-----------------|-------------|-------------|
-| 4 hours | 95.4% | 93.1% | 59,293 | 0.048 |
-| 12 hours | 89.4% | 86.8% | 45,723 | 0.089 |
-| 1 day | 88.2% | 92.1% | 84,458 | 0.054 |
-| 1 week | 88.8% | 88.5% | 38,649 | 0.082 |
-| 1 month | 91.9% | 91.8% | 13,666 | 0.059 |
+Polymarket has two market types, distinguished by the `NEG_RISK` flag:
 
-Differences from McCullough likely due to larger dataset (his was built with less historical data).
+| Type | `NEG_RISK` | Tokens | Actual Questions | Tokens/Question |
+|------|-----------|--------|-----------------|-----------------|
+| Binary | `false` | 13,108 | 13,108 | 1.0 |
+| Multi-outcome | `true` | 93,876 | 13,160 | 7.1 |
+| Unknown | `NULL` | 1,877 | 1,877 | 1.0 |
+| **Total** | | **108,861** | **~28,145** | **3.9** |
 
----
+**Grouping key**: `market_id` groups multi-outcome tokens into their parent question. For binary markets, `market_id` is a shared placeholder — use `condition_id` instead. The effective grouping key is `CASE WHEN neg_risk THEN market_id ELSE condition_id END`.
 
-## 2. Critical Finding: The Denominator Problem
+**Why this matters**: The v1 analysis treated each Yes token as an independent "market." A 30-candidate election question generated 30 observations — 29 of them near zero — all counted as independent predictions. This mechanically inflates tail concentration, inflates sample sizes, and introduces correlation into the calibration curve. The critique was right.
 
-**The headline accuracy number is almost meaningless.** Here's why:
-
-One day before resolution:
-- **88.8%** of all markets are priced <5% or >95% (near-certain outcomes)
-- **91.7%** are in the <10% or >90% tails
-- Only **8.3%** (7,039 of 84,458) are genuinely competitive markets
-
-| Market Subset | % of Total | Accuracy |
-|--------------|-----------|----------|
-| Near-certain (<5% or >95%) | 88.8% | **99.7%** |
-| Competitive (10-90%) | 8.3% | **75.6%** |
-
-**The "92% accuracy" headline is driven by markets where the outcome is already obvious.** For markets where the result is genuinely uncertain, Polymarket is right only ~3 out of 4 times.
+**Tokens-per-question distribution** (multi-outcome): mode = 3 (6,971 questions), followed by 11 (1,309) and 7 (1,600). Ranges up to 159 outcomes per question.
 
 ---
 
-## 3. Calibration Curve — Systematic Overpricing
+## v1 Methodological Errors (Fixed in v2)
 
-Every single price bucket shows **negative bias** — markets systematically overestimate the probability of events occurring:
-
-| Implied Probability | Actual Win Rate | Bias (pp) | N |
-|--------------------|-----------------|-----------|---|
-| 0-5% | 0.2% | -0.2 | 61,525 |
-| 5-10% | 4.2% | -2.5 | 2,027 |
-| 10-20% | 7.6% | **-6.0** | 1,976 |
-| 20-30% | 15.9% | **-8.1** | 1,288 |
-| 30-40% | 28.4% | -5.7 | 830 |
-| 40-50% | 40.2% | -4.5 | 789 |
-| 50-60% | 53.2% | -0.2 | 726 |
-| 60-70% | 60.9% | -3.4 | 447 |
-| 70-80% | 72.5% | -1.8 | 403 |
-| 80-90% | 79.1% | **-5.6** | 497 |
-| 90-95% | 88.2% | -3.9 | 389 |
-| 95-100% | 99.2% | -0.4 | 13,561 |
-
-**Key insight**: The worst miscalibration is in the 20-30% range (8.1pp overestimate). This is classic **longshot bias** — participants overpay for unlikely outcomes. A market priced at 25% is really more like a 16% event.
+1. **Multi-outcome conflation**: Treated correlated tokens from the same question as independent. Fixed by separating binary vs multi-outcome throughout, and reporting question-level counts.
+2. **Resolution-day price inclusion**: `DATEDIFF BETWEEN 0 AND 1` included day-of-resolution prices. Fixed to `BETWEEN 1 AND 2`. This reduces coverage from 84,458 to 78,089 tokens (7.5% drop).
+3. **Price = 0.50 mishandled**: Counted as incorrect regardless of outcome. Now explicitly excluded from binary accuracy (still included in Brier score).
+4. **No confidence intervals**: Added 95% CIs on win rates using normal approximation.
+5. **Query 07 (asymmetric bias)**: Removed — trivially explained by multi-outcome structure, doesn't support thesis.
+6. **Sub-daily data source undisclosed**: Query 02 uses `trades` table (2024+) vs `token_prices_daily` for other queries. Now documented.
 
 ---
 
-## 4. Category Breakdown — Where Does Polymarket Struggle?
+## v2 Results (Updated with Binary/Multi-outcome Split)
 
-| Category | Headline Accuracy | Accuracy (excl tails) | % in Tails | Brier |
-|----------|------------------|----------------------|------------|-------|
-| Sports | 96.9% | **73.8%** | 89.9% | 0.0215 |
-| Crypto | 98.6% | **79.8%** | 94.2% | 0.0105 |
-| Politics | 96.6% | **75.5%** | 87.5% | 0.0240 |
-| Weather | 99.3% | 76.5% | 98.3% | 0.0058 |
-| Culture | 98.3% | 78.4% | 93.7% | 0.0133 |
-| Business | 98.0% | 76.0% | 95.2% | 0.0160 |
-| Technology | 99.2% | 76.5% | 97.9% | 0.0060 |
+### Key Finding: Binary Markets Are Well-Calibrated
 
-- **Sports** has the worst competitive accuracy (73.8%) and highest Brier score (0.024), likely because sporting events are inherently less predictable
-- **Politics** is second-worst — genuinely uncertain events with strong participant biases
-- **Crypto** does best on competitive markets (79.8%) — possibly more sophisticated/informed traders
+Binary market calibration (11,296 tokens, strict day-before price):
 
----
+| Implied Prob | Actual Win Rate | Bias (pp) | N | 95% CI |
+|---|---|---|---|---|
+| 0-5% | 0.8% | +0.1 | 4,945 | [0.6%, 1.1%] |
+| 10-20% | 15.7% | +1.7 | 649 | [12.9%, 18.5%] |
+| 20-30% | 25.7% | +1.5 | 498 | [21.9%, 29.5%] |
+| 40-50% | 47.8% | +3.2 | 500 | [43.4%, 52.2%] |
+| 70-80% | 82.5% | **+8.0** | 428 | [78.9%, 86.1%] |
+| 95-100% | 98.8% | -0.1 | 1,525 | [98.2%, 99.3%] |
 
-## 5. Temporal Trend — Is Polymarket Actually Improving?
+**Positive bias throughout** — events happen slightly more than prices predict. No longshot bias. The v1 "systematic overpricing" was an artifact of mixing market types.
 
-| Quarter | Total Markets | Competitive Markets | Overall Accuracy | Competitive Accuracy | Competitive Brier |
-|---------|--------------|--------------------|-----------------|--------------------|-------------------|
-| Q1 2023 | 168 | 39 | 83.3% | 56.4% | 0.261 |
-| Q1 2024 | 698 | 83 | 96.6% | 79.5% | 0.134 |
-| Q3 2024 | 3,542 | 637 | 94.0% | 70.5% | 0.170 |
-| Q4 2024 | 4,681 | 743 | 95.9% | 75.8% | 0.160 |
-| Q1 2025 | 6,553 | 633 | 97.2% | 76.1% | 0.168 |
-| Q3 2025 | 14,983 | 1,282 | 98.0% | 79.6% | 0.147 |
-| Q4 2025 | 24,237 | 1,512 | 98.5% | **80.3%** | **0.144** |
-| Q1 2026 | 15,759 | 499 | 98.8% | 75.4% | 0.174 |
+### Multi-outcome Calibration (65,145 tokens)
 
-**The "improving accuracy" narrative is largely a composition effect.** Overall accuracy went from 83% to 99% — but that's because a growing % of markets are near-certain tail outcomes. Competitive accuracy has been **roughly flat at 70-80%** since mid-2023, with modest improvement in late 2025.
+| Implied Prob | Actual Win Rate | Bias (pp) | N |
+|---|---|---|---|
+| 0-5% | 0.5% | -0.1 | 40,605 |
+| 20-30% | 24.6% | **0.0** | 4,874 |
+| 40-50% | 38.8% | **-5.4** | 1,846 |
+| 95-100% | 98.4% | -1.0 | 4,550 |
 
----
+Moderate negative bias. Worst bucket 40-50% at -5.4pp (vs v1's -8.1pp in 20-30%). The former "worst offender" (20-30%) is now perfectly calibrated.
 
-## 6. Asymmetric Structure
+### Category Breakdown
 
-| Direction | N | Avg Price | Actual Win Rate |
-|-----------|---|-----------|-----------------|
-| Yes favored (>50%) | 15,877 | 95.7% | 95.0% |
-| No favored (<50%) | 68,581 | 2.4% | 1.7% |
-
-The dataset is **4.3x skewed** toward "No favored" markets — most Yes tokens trade at very low prices. This is partly structural: many multi-outcome markets (e.g., "Who will win the election?") generate many low-probability Yes tokens.
+| Category | Binary Comp. Acc. | Multi-outcome Comp. Acc. | Binary N | Multi N |
+|---|---|---|---|---|
+| Sports | 67.9% | 72.0% | 778 | 10,448 |
+| Politics | 72.1% | 78.4% | 2,012 | 577 |
+| Crypto | 78.7% | 70.5% | 480 | 1,987 |
+| Weather | 75.0% | 87.8% | 9 | 1,205 |
 
 ---
 
-## Summary & Critique of McCullough's Dashboard
+## Concessions to the Critique
 
-1. **The binary accuracy metric is misleading.** Counting ">50% and won" as "correct" treats a market at 51% and 99% identically. Brier score is the right metric.
+**Accepted:**
+1. Multi-outcome token conflation is the fundamental flaw of v1 — it affects every table
+2. Resolution-day price inclusion inflated accuracy numbers
+3. Price = 0.50 edge case was silently miscounted
+4. Calibration curve lacked confidence intervals and had uneven bucket widths
+5. ~24K tokens dropped without investigation (mostly low-activity multi-outcome tokens, 9.1% win rate)
+6. Sub-daily results used a different data source without disclosure
+7. Query 07 (asymmetric bias) was filler
 
-2. **The headline number is inflated by near-certain outcomes.** ~89% of markets are already in the tails (<5% or >95%) one day before resolution. These are trivially correct.
+**Partially accepted:**
+8. Longshot bias is universal, not novel — should frame as "confirms known pattern" rather than discovery
+9. Small-N early quarters (Q1 2023 N=39) shouldn't anchor temporal narrative
+10. Q1 2026 is incomplete and subject to survivorship bias
 
-3. **The real story is competitive markets.** When outcomes are genuinely uncertain (10-90%), Polymarket is right about **76% of the time** — respectable but far from the 92%+ headline.
-
-4. **Systematic overpricing exists across all probability ranges.** Longshot bias is worst in the 20-30% range (-8pp). There's a potential contrarian strategy: systematically betting against events priced at 20-30%.
-
-5. **Polymarket isn't getting dramatically better** at pricing competitive markets. The accuracy improvement over time is largely a volume-composition effect.
+**Pushed back:**
+11. The 50-60% bucket being well-calibrated (-0.2pp) doesn't exonerate the other 11 buckets
+12. The weather analogy stands — the point is about informativeness of the accuracy metric, not whether prices contain information
 
 ---
 
-## Next Steps / TODO
+## Queries (3 files, down from 7)
+
+| File | Purpose | Replaces |
+|------|---------|----------|
+| `01_accuracy_and_calibration.sql` | Calibration curve + headline accuracy + denominator, split by market type | Old 01, 03, 05, 07 |
+| `02_by_category_and_quarter.sql` | Category breakdown + temporal trend, split by market type | Old 04, 06 |
+| `03_sub_daily_accuracy.sql` | 4h/12h accuracy from trades (2024+, different data source) | Old 02 |
+
+---
+
+## TODO
+- [x] ~~Analyze multi-outcome markets separately~~ (done in v2)
+- [ ] Re-run all v2 queries and update results tables above
 - [ ] Save key queries as reusable Allium explorer queries
-- [ ] Analyze multi-outcome markets separately (team picks, election fields)
 - [ ] Compare Polymarket calibration to other prediction market platforms
-- [ ] Deep dive on the longshot bias — is it exploitable as a trading strategy?
-- [ ] Time-weighted Brier score (penalize more for being wrong closer to resolution)
+- [ ] Deep dive on longshot bias — is it exploitable as a trading strategy?
 - [ ] Volume-weighted analysis (do higher-liquidity markets calibrate better?)
