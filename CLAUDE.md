@@ -115,9 +115,30 @@ Moderate negative bias. Worst bucket 40-50% at -5.4pp (vs v1's -8.1pp in 20-30%)
 
 ---
 
+## Known Limitation: Daily Price Rounding
+
+Queries 01 and 02 use `token_prices_daily` (DATE granularity). The "day before" filter `DATEDIFF('day', p.day, r.resolved_at::date) BETWEEN 1 AND 2` truncates `resolved_at` to a calendar date, so "1 day before" is really "the previous calendar day's end-of-day price" — not exactly 24 hours before resolution.
+
+**Better approach**: derive prices from the `trades` table using exact timestamps:
+
+```sql
+FROM polygon.predictions.trades t
+JOIN resolved_markets r
+  ON t.condition_id = r.condition_id AND t.asset_id = r.token_id
+WHERE t.block_timestamp < DATEADD('hour', -24, r.resolved_at)
+QUALIFY ROW_NUMBER() OVER (
+  PARTITION BY t.condition_id
+  ORDER BY t.block_timestamp DESC
+) = 1
+```
+
+This gets the last trade before exactly 24 hours pre-resolution. Trade-offs: heavier query, stale prices for thin markets, single-trade noise vs end-of-day aggregate. But eliminates calendar-day rounding and any resolution-day contamination.
+
+---
+
 ## TODO
 - [x] ~~Analyze multi-outcome markets separately~~ (done in v2)
-- [ ] Re-run all v2 queries and update results tables above
+- [ ] Switch queries 01/02 from `token_prices_daily` to `trades`-derived exact-time prices
 - [ ] Save key queries as reusable Allium explorer queries
 - [ ] Compare Polymarket calibration to other prediction market platforms
 - [ ] Deep dive on longshot bias — is it exploitable as a trading strategy?
