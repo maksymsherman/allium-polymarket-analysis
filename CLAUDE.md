@@ -136,6 +136,22 @@ This gets the last trade before exactly 24 hours pre-resolution. Trade-offs: hea
 
 ---
 
+## Testing & Development Workflow
+
+**Always test on a small sample first.** Before running queries on the full dataset (~108K tokens), test on a handful of recent resolved markets to verify logic:
+
+1. **Start small**: Filter to 5-10 specific recent markets by `condition_id` or `market_id`. Confirm joins, price filters, and grouping logic produce expected results.
+2. **Only scale up after queries are finalized.** Full-data runs are expensive and slow — don't iterate on the full dataset.
+3. **Add asserts to full queries.** Small samples may not exhibit the same data characteristics as the full dataset. When running at scale, validate assumptions:
+   - `NEG_RISK` is not NULL (1,877 tokens have NULL — decide how to handle)
+   - `market_id` is not NULL for multi-outcome tokens
+   - `price` is within expected bounds (0 < price < 1)
+   - Row counts are in expected ranges (e.g., 78K+ tokens after day-before filter)
+   - No duplicate `condition_id` after deduplication (`QUALIFY ROW_NUMBER()`)
+4. **Small samples differ from full data.** A sample of 10 markets may all be binary, all have prices, and all have `NEG_RISK` set. The full dataset has NULLs, missing prices, edge cases, and multi-outcome markets with 100+ tokens. Don't assume what works on the sample generalizes without asserts.
+
+---
+
 ## TODO
 - [x] ~~Analyze multi-outcome markets separately~~ (done in v2)
 - [ ] Switch queries 01/02 from `token_prices_daily` to `trades`-derived exact-time prices
