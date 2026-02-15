@@ -5,32 +5,25 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
+  ReferenceLine,
   ResponsiveContainer,
+  LabelList,
 } from "recharts";
 import { categoryData } from "../data";
+import { FONT, BLACK, GRAY, RULE, TICK, AXIS_LINE, TOOLTIP_STYLE, BINARY_COLOR, MULTI_COLOR } from "./chartTheme";
 
-const BLUE = "#2563eb";
-const AMBER = "#d97706";
-
-// Sort by multi-outcome N descending (most data first)
-const sorted = [...categoryData].sort((a, b) => b.multiN + b.binaryN - (a.multiN + a.binaryN));
+// Sort by total N descending
+const sorted = [...categoryData].sort((a, b) => (b.multiN + b.binaryN) - (a.multiN + a.binaryN));
 
 function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: typeof sorted[0] }> }) {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="bg-white border border-gray-200 rounded px-3 py-2 text-sm shadow-sm">
-      <p className="font-medium text-gray-900 mb-1">{d.category}</p>
-      <p style={{ color: BLUE }}>
-        Binary: {d.binaryAcc}%
-        <span className="text-gray-400 ml-1">(n={d.binaryN.toLocaleString()})</span>
-      </p>
-      <p style={{ color: AMBER }}>
-        Multi: {d.multiAcc}%
-        <span className="text-gray-400 ml-1">(n={d.multiN.toLocaleString()})</span>
-      </p>
+    <div style={TOOLTIP_STYLE}>
+      <p style={{ fontWeight: 500, marginBottom: 2 }}>{d.category}</p>
+      <p style={{ color: BINARY_COLOR }}>Binary: {d.binaryAcc}% <span style={{ color: GRAY }}>(n={d.binaryN.toLocaleString()})</span></p>
+      <p style={{ color: MULTI_COLOR }}>Multi: {d.multiAcc}% <span style={{ color: GRAY }}>(n={d.multiN.toLocaleString()})</span></p>
     </div>
   );
 }
@@ -38,43 +31,44 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
 export default function CategoryChart() {
   return (
     <div>
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">
-        Competitive Accuracy by Category
+      <h2 style={{ fontFamily: FONT, fontSize: 20, fontWeight: 400, color: BLACK, marginBottom: 4 }}>
+        Competitive accuracy by category
       </h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Markets priced 10–90% only. Sports are hardest to predict; weather is easiest.
+      <p style={{ fontFamily: FONT, fontSize: 14, color: GRAY, marginBottom: 16 }}>
+        Markets priced 10&ndash;90% only.{" "}
+        <span style={{ color: BINARY_COLOR }}>Indigo = binary</span>,{" "}
+        <span style={{ color: MULTI_COLOR }}>rose = multi-outcome</span>.
       </p>
       <ResponsiveContainer width="100%" height={320}>
-        <BarChart data={sorted} layout="vertical" margin={{ top: 8, right: 24, bottom: 8, left: 8 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" horizontal={false} />
+        <BarChart data={sorted} layout="vertical" margin={{ top: 4, right: 48, bottom: 4, left: 4 }}>
+          {[60, 70, 80, 90].map((x) => (
+            <ReferenceLine key={x} x={x} stroke={RULE} strokeWidth={0.5} />
+          ))}
           <XAxis
             type="number"
             domain={[50, 100]}
             ticks={[50, 60, 70, 80, 90, 100]}
-            tick={{ fontSize: 12, fill: "#6b7280" }}
-            label={{ value: "Competitive Accuracy (%)", position: "bottom", offset: 0, fontSize: 13, fill: "#374151" }}
+            tick={TICK}
+            axisLine={AXIS_LINE}
+            tickLine={false}
           />
           <YAxis
             dataKey="category"
             type="category"
             width={80}
-            tick={{ fontSize: 13, fill: "#374151" }}
+            tick={{ fontFamily: FONT, fontSize: 13, fill: BLACK }}
+            axisLine={false}
+            tickLine={false}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="binaryAcc" name="Binary" fill={BLUE} maxBarSize={14} radius={[0, 3, 3, 0]} />
-          <Bar dataKey="multiAcc" name="Multi-outcome" fill={AMBER} maxBarSize={14} radius={[0, 3, 3, 0]} />
+          <Bar dataKey="binaryAcc" fill={BINARY_COLOR} maxBarSize={12} radius={0}>
+            <LabelList dataKey="binaryAcc" position="right" style={{ fontFamily: FONT, fontSize: 12, fill: BINARY_COLOR }} />
+          </Bar>
+          <Bar dataKey="multiAcc" fill={MULTI_COLOR} maxBarSize={12} radius={0}>
+            <LabelList dataKey="multiAcc" position="right" style={{ fontFamily: FONT, fontSize: 12, fill: MULTI_COLOR }} />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex items-center justify-center gap-6 mt-1 text-sm">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: BLUE }} />
-          Binary
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: AMBER }} />
-          Multi-outcome
-        </span>
-      </div>
     </div>
   );
 }

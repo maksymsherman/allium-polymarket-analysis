@@ -5,27 +5,20 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ReferenceLine,
   ResponsiveContainer,
-  Cell,
 } from "recharts";
 import { binaryCalibration, multiCalibration } from "../data";
-
-const BLUE = "#2563eb";
-const BLUE_LIGHT = "#93bbfd";
-const AMBER = "#d97706";
-const AMBER_LIGHT = "#fbbf24";
+import { FONT, BLACK, GRAY, TICK, AXIS_LINE, TOOLTIP_STYLE, BINARY_COLOR, MULTI_COLOR } from "./chartTheme";
 
 const biasData = binaryCalibration.map((b, i) => {
   const m = multiCalibration[i];
   return {
-    bucket: b.bucket,
+    midpoint: String(b.midpoint),
     binaryBias: b.bias,
     multiBias: m.bias,
-    binaryN: b.n,
-    multiN: m.n,
+    bucket: b.bucket,
   };
 });
 
@@ -33,14 +26,10 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="bg-white border border-gray-200 rounded px-3 py-2 text-sm shadow-sm">
-      <p className="font-medium text-gray-900 mb-1">{d.bucket}</p>
-      <p style={{ color: BLUE }}>
-        Binary: {d.binaryBias > 0 ? "+" : ""}{d.binaryBias} pp
-      </p>
-      <p style={{ color: AMBER }}>
-        Multi: {d.multiBias > 0 ? "+" : ""}{d.multiBias} pp
-      </p>
+    <div style={TOOLTIP_STYLE}>
+      <p style={{ fontWeight: 500, marginBottom: 2 }}>{d.bucket}</p>
+      <p style={{ color: BINARY_COLOR }}>Binary: {d.binaryBias > 0 ? "+" : ""}{d.binaryBias} pp</p>
+      <p style={{ color: MULTI_COLOR }}>Multi: {d.multiBias > 0 ? "+" : ""}{d.multiBias} pp</p>
     </div>
   );
 }
@@ -48,52 +37,39 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
 export default function BiasChart() {
   return (
     <div>
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">
-        Calibration Bias by Probability Bucket
+      <h2 style={{ fontFamily: FONT, fontSize: 20, fontWeight: 400, color: BLACK, marginBottom: 4 }}>
+        Calibration bias by probability bucket
       </h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Positive = underpriced (events happen more). Negative = overpriced (events happen less).
+      <p style={{ fontFamily: FONT, fontSize: 14, color: GRAY, marginBottom: 16 }}>
+        Positive = underpriced. Negative = overpriced. Midpoint shown on axis.
       </p>
       <ResponsiveContainer width="100%" height={320}>
-        <BarChart data={biasData} margin={{ top: 8, right: 16, bottom: 32, left: 8 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+        <BarChart data={biasData} margin={{ top: 8, right: 16, bottom: 24, left: 8 }}>
           <XAxis
-            dataKey="bucket"
-            tick={{ fontSize: 11, fill: "#6b7280" }}
-            angle={-35}
-            textAnchor="end"
-            height={60}
-            label={{ value: "Implied Probability", position: "bottom", offset: 16, fontSize: 13, fill: "#374151" }}
+            dataKey="midpoint"
+            tick={TICK}
+            axisLine={AXIS_LINE}
+            tickLine={false}
+            label={{ value: "Implied probability (%)", position: "bottom", offset: 8, fontFamily: FONT, fontSize: 13, fill: BLACK }}
           />
           <YAxis
-            tick={{ fontSize: 12, fill: "#6b7280" }}
-            label={{ value: "Bias (pp)", angle: -90, position: "insideLeft", offset: 4, fontSize: 13, fill: "#374151" }}
+            tick={TICK}
+            axisLine={AXIS_LINE}
+            tickLine={false}
             domain={[-8, 10]}
+            ticks={[-5, 0, 5, 10]}
           />
           <Tooltip content={<CustomTooltip />} />
-          <ReferenceLine y={0} stroke="#9ca3af" strokeWidth={1} />
-          <Bar dataKey="binaryBias" name="Binary" maxBarSize={20} radius={[2, 2, 0, 0]}>
-            {biasData.map((d, i) => (
-              <Cell key={i} fill={d.binaryBias >= 0 ? BLUE : BLUE_LIGHT} />
-            ))}
-          </Bar>
-          <Bar dataKey="multiBias" name="Multi-outcome" maxBarSize={20} radius={[2, 2, 0, 0]}>
-            {biasData.map((d, i) => (
-              <Cell key={i} fill={d.multiBias >= 0 ? AMBER : AMBER_LIGHT} />
-            ))}
-          </Bar>
+          <ReferenceLine y={0} stroke={BLACK} strokeWidth={0.5} />
+          <Bar dataKey="binaryBias" fill={BINARY_COLOR} maxBarSize={16} radius={0} />
+          <Bar dataKey="multiBias" fill={MULTI_COLOR} maxBarSize={16} radius={0} />
         </BarChart>
       </ResponsiveContainer>
-      <div className="flex items-center justify-center gap-6 mt-1 text-sm">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: BLUE }} />
-          Binary
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: AMBER }} />
-          Multi-outcome
-        </span>
-      </div>
+      <p style={{ fontFamily: FONT, fontSize: 13, color: GRAY, textAlign: "center", marginTop: 4 }}>
+        <span style={{ color: BINARY_COLOR }}>Indigo = binary</span> &ensp;
+        <span style={{ color: MULTI_COLOR }}>Rose = multi-outcome</span> &ensp;
+        Units: percentage points
+      </p>
     </div>
   );
 }

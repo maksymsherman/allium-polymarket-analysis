@@ -6,17 +6,14 @@ import {
   Area,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ReferenceLine,
+  ReferenceDot,
   ResponsiveContainer,
 } from "recharts";
 import { binaryCalibration, multiCalibration } from "../data";
+import { FONT, BLACK, GRAY, RULE, TICK, AXIS_LINE, TOOLTIP_STYLE, BINARY_COLOR, MULTI_COLOR } from "./chartTheme";
 
-const BLUE = "#2563eb";
-const AMBER = "#d97706";
-
-// Merge binary and multi-outcome into one dataset for the chart
 const chartData = binaryCalibration.map((b, i) => {
   const m = multiCalibration[i];
   return {
@@ -32,27 +29,22 @@ const chartData = binaryCalibration.map((b, i) => {
   };
 });
 
-// For the CI band area, recharts needs [lo, hi] range
 const ciData = chartData.map((d) => ({
   ...d,
   binaryCiRange: [d.binaryCiLo, d.binaryCiHi] as [number, number],
 }));
 
+const last = ciData[ciData.length - 1];
+
 function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: typeof ciData[0] }> }) {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="bg-white border border-gray-200 rounded px-3 py-2 text-sm shadow-sm">
-      <p className="font-medium text-gray-900 mb-1">{d.bucket} implied</p>
-      <p style={{ color: BLUE }}>
-        Binary: {d.binaryWinRate}% actual
-        <span className="text-gray-400 ml-1">(n={d.binaryN.toLocaleString()})</span>
-      </p>
-      <p style={{ color: AMBER }}>
-        Multi: {d.multiWinRate}% actual
-        <span className="text-gray-400 ml-1">(n={d.multiN.toLocaleString()})</span>
-      </p>
-      <p className="text-gray-400 mt-1">Perfect: {d.perfect}%</p>
+    <div style={TOOLTIP_STYLE}>
+      <p style={{ fontWeight: 500, marginBottom: 2 }}>{d.bucket} implied</p>
+      <p style={{ color: BINARY_COLOR }}>Binary: {d.binaryWinRate}% <span style={{ color: GRAY }}>(n={d.binaryN.toLocaleString()})</span></p>
+      <p style={{ color: MULTI_COLOR }}>Multi: {d.multiWinRate}% <span style={{ color: GRAY }}>(n={d.multiN.toLocaleString()})</span></p>
+      <p style={{ color: GRAY, marginTop: 2, fontSize: 11 }}>Perfect: {d.perfect}%</p>
     </div>
   );
 }
@@ -60,87 +52,86 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
 export default function CalibrationChart() {
   return (
     <div>
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">
-        Calibration: Implied Probability vs Actual Outcome
+      <h2 style={{ fontFamily: FONT, fontSize: 20, fontWeight: 400, color: BLACK, marginBottom: 4 }}>
+        Calibration: implied probability vs actual outcome
       </h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Points above the diagonal = underpriced (events happen more than predicted).
-        Below = overpriced. Shaded band = 95% CI for binary markets.
+      <p style={{ fontFamily: FONT, fontSize: 14, color: GRAY, marginBottom: 16 }}>
+        Above the diagonal = underpriced. Below = overpriced. Band = 95% CI for binary.
       </p>
       <ResponsiveContainer width="100%" height={420}>
-        <ComposedChart data={ciData} margin={{ top: 8, right: 24, bottom: 32, left: 8 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+        <ComposedChart data={ciData} margin={{ top: 12, right: 24, bottom: 32, left: 8 }}>
           <XAxis
             dataKey="midpoint"
             type="number"
             domain={[0, 100]}
-            ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
-            tick={{ fontSize: 12, fill: "#6b7280" }}
-            label={{ value: "Implied Probability (%)", position: "bottom", offset: 16, fontSize: 13, fill: "#374151" }}
+            ticks={[0, 25, 50, 75, 100]}
+            tick={TICK}
+            axisLine={AXIS_LINE}
+            tickLine={false}
+            label={{ value: "Implied probability (%)", position: "bottom", offset: 16, fontFamily: FONT, fontSize: 13, fill: BLACK }}
           />
           <YAxis
             type="number"
             domain={[0, 100]}
-            ticks={[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]}
-            tick={{ fontSize: 12, fill: "#6b7280" }}
-            label={{ value: "Actual Win Rate (%)", angle: -90, position: "insideLeft", offset: 4, fontSize: 13, fill: "#374151" }}
+            ticks={[0, 25, 50, 75, 100]}
+            tick={TICK}
+            axisLine={AXIS_LINE}
+            tickLine={false}
           />
           <Tooltip content={<CustomTooltip />} />
+
+          {/* Thin horizontal rules */}
+          {[25, 50, 75].map((y) => (
+            <ReferenceLine key={y} y={y} stroke={RULE} strokeWidth={0.5} />
+          ))}
 
           {/* Perfect calibration diagonal */}
           <ReferenceLine
             segment={[{ x: 0, y: 0 }, { x: 100, y: 100 }]}
-            stroke="#d1d5db"
-            strokeDasharray="6 4"
-            strokeWidth={1.5}
+            stroke={GRAY}
+            strokeDasharray="4 3"
+            strokeWidth={0.8}
           />
 
           {/* Binary CI band */}
           <Area
             dataKey="binaryCiRange"
             type="monotone"
-            fill={BLUE}
-            fillOpacity={0.1}
+            fill={BINARY_COLOR}
+            fillOpacity={0.08}
             stroke="none"
           />
 
-          {/* Binary markets line */}
+          {/* Binary — solid line */}
           <Line
             dataKey="binaryWinRate"
             type="monotone"
-            stroke={BLUE}
-            strokeWidth={2.5}
-            dot={{ r: 4, fill: BLUE, strokeWidth: 0 }}
-            activeDot={{ r: 6, strokeWidth: 2, stroke: "#fff" }}
-            name="Binary"
+            stroke={BINARY_COLOR}
+            strokeWidth={1.8}
+            dot={{ r: 2.5, fill: BINARY_COLOR, strokeWidth: 0 }}
+            activeDot={{ r: 4, strokeWidth: 1.5, stroke: "white" }}
           />
 
-          {/* Multi-outcome markets line */}
+          {/* Multi-outcome — dashed line */}
           <Line
             dataKey="multiWinRate"
             type="monotone"
-            stroke={AMBER}
-            strokeWidth={2.5}
-            dot={{ r: 4, fill: AMBER, strokeWidth: 0 }}
-            activeDot={{ r: 6, strokeWidth: 2, stroke: "#fff" }}
-            name="Multi-outcome"
+            stroke={MULTI_COLOR}
+            strokeWidth={1.8}
+            strokeDasharray="6 3"
+            dot={{ r: 2.5, fill: MULTI_COLOR, strokeWidth: 0 }}
+            activeDot={{ r: 4, strokeWidth: 1.5, stroke: "white" }}
+          />
+
+          {/* Direct labels where lines diverge most */}
+          <ReferenceDot x={75} y={82.5} r={0}
+            label={{ value: "Binary", position: "top", fill: BINARY_COLOR, fontFamily: FONT, fontSize: 13, offset: 6 }}
+          />
+          <ReferenceDot x={45} y={33} r={0}
+            label={{ value: "Multi-outcome", position: "bottom", fill: MULTI_COLOR, fontFamily: FONT, fontSize: 13, offset: 8 }}
           />
         </ComposedChart>
       </ResponsiveContainer>
-      <div className="flex items-center justify-center gap-6 mt-2 text-sm">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: BLUE }} />
-          Binary markets (n=11,296)
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: AMBER }} />
-          Multi-outcome tokens (n=65,145)
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block w-3 h-0.5" style={{ backgroundColor: "#d1d5db", borderTop: "1px dashed #d1d5db" }} />
-          Perfect calibration
-        </span>
-      </div>
     </div>
   );
 }

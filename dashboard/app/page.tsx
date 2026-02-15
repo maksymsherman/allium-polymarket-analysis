@@ -2,7 +2,19 @@ import CalibrationChart from "./components/CalibrationChart";
 import BiasChart from "./components/BiasChart";
 import CategoryChart from "./components/CategoryChart";
 import CompositionChart from "./components/CompositionChart";
-import { marketStructure } from "./data";
+import QuarterlyTrendChart from "./components/QuarterlyTrendChart";
+import { binaryCalibration, multiCalibration, marketStructure, metadata } from "./data";
+
+// Compute weighted average bias from calibration data
+function weightedAvgBias(rows: { bias: number; n: number }[]): number {
+  const totalN = rows.reduce((s, r) => s + r.n, 0);
+  if (totalN === 0) return 0;
+  const weightedSum = rows.reduce((s, r) => s + r.bias * r.n, 0);
+  return Math.round((weightedSum / totalN) * 10) / 10;
+}
+
+const binaryBias = weightedAvgBias(binaryCalibration);
+const multiBias = weightedAvgBias(multiCalibration);
 
 function StatCard({
   value,
@@ -24,7 +36,20 @@ function StatCard({
   );
 }
 
+function formatBias(bias: number): string {
+  const sign = bias > 0 ? "+" : "";
+  return `${sign}${bias.toFixed(1)} pp`;
+}
+
 export default function Home() {
+  const refreshDate = metadata.refreshedAt
+    ? new Date(metadata.refreshedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    : null;
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-12 font-[family-name:var(--font-geist-sans)]">
       {/* Header */}
@@ -38,7 +63,16 @@ export default function Home() {
           multi-outcome markets behave very differently — mixing them produces misleading results.
         </p>
         <p className="text-xs text-gray-400 mt-2">
-          Data: Polygon via Allium &middot; Jan 2022 &ndash; Feb 2026 &middot;{" "}
+          Data: Polygon via{" "}
+          <a
+            href="https://allium.so"
+            className="underline hover:text-gray-600"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Allium
+          </a>
+          {" "}&middot; Jan 2022 &ndash; Feb 2026 &middot;{" "}
           Replicating{" "}
           <a
             href="https://dune.com/alexmccullough/how-accurate-is-polymarket"
@@ -64,14 +98,14 @@ export default function Home() {
           sub="After grouping multi-outcome"
         />
         <StatCard
-          value="+1.9 pp"
+          value={formatBias(binaryBias)}
           label="Binary bias (avg)"
-          sub="Underpriced — events happen more"
+          sub={binaryBias >= 0 ? "Underpriced \u2014 events happen more" : "Overpriced \u2014 events happen less"}
         />
         <StatCard
-          value="-1.6 pp"
+          value={formatBias(multiBias)}
           label="Multi-outcome bias (avg)"
-          sub="Overpriced — events happen less"
+          sub={multiBias >= 0 ? "Underpriced \u2014 events happen more" : "Overpriced \u2014 events happen less"}
         />
       </div>
 
@@ -89,6 +123,11 @@ export default function Home() {
           <CategoryChart />
         </section>
       </div>
+
+      {/* Quarterly trend */}
+      <section className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <QuarterlyTrendChart />
+      </section>
 
       {/* Market composition */}
       <section className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
@@ -142,9 +181,26 @@ export default function Home() {
           filtered to <code className="text-gray-500">DATEDIFF(day) BETWEEN 1 AND 2</code> (strictly excludes
           resolution day). Binary/multi-outcome split via <code className="text-gray-500">NEG_RISK</code> flag.
           Tokens priced at exactly 50&cent; excluded from accuracy calculations. 95% CIs via normal approximation
-          (overstates precision for multi-outcome due to within-question correlation). 76,441 tokens with
-          day-before prices out of 108,861 total.
+          (overstates precision for multi-outcome due to within-question correlation).{" "}
+          {marketStructure.analysisTokens.total.toLocaleString()} tokens with day-before prices out of{" "}
+          {marketStructure.total.tokens.toLocaleString()} total.
         </p>
+        <div className="flex items-center justify-between mt-4">
+          {refreshDate && (
+            <p className="text-gray-400">Last refreshed: {refreshDate}</p>
+          )}
+          <p>
+            Powered by{" "}
+            <a
+              href="https://allium.so"
+              className="underline hover:text-gray-600"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Allium
+            </a>
+          </p>
+        </div>
       </footer>
     </div>
   );
