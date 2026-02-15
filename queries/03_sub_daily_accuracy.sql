@@ -15,7 +15,11 @@ WITH resolved_markets AS (
     m.token_id,
     m.is_winner,
     m.resolved_at,
-    CASE WHEN m.neg_risk THEN 'multi_outcome' ELSE 'binary' END AS market_type
+    CASE
+      WHEN m.neg_risk = true THEN 'multi_outcome'
+      WHEN m.neg_risk = false THEN 'binary'
+      ELSE 'unknown'
+    END AS market_type
   FROM polygon.predictions.markets m
   WHERE m.resolved_at IS NOT NULL
     AND m.token_outcome = 'Yes'
