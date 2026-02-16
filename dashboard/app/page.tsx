@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DataFreshness from "./components/DataFreshness";
 import CalibrationChart from "./components/CalibrationChart";
 import BiasChart from "./components/BiasChart";
 import CategoryChart from "./components/CategoryChart";
@@ -63,11 +64,14 @@ export default function Home() {
           tokens across ~{marketStructure.total.questions.toLocaleString()} questions. Binary and
           multi-outcome markets behave very differently — mixing them produces misleading results.
         </p>
-        <p className="text-sm text-gray-500 mt-3">
-          <Link href="/report" className="underline hover:text-gray-700">
+        <div className="flex items-center gap-4 mt-3">
+          <Link href="/report" className="text-sm text-gray-500 underline hover:text-gray-700">
             Read the full report
           </Link>
-        </p>
+          {metadata.refreshedAt && (
+            <DataFreshness refreshedAt={metadata.refreshedAt} />
+          )}
+        </div>
         <p className="text-xs text-gray-400 mt-2">
           Data: Polygon via{" "}
           <a
