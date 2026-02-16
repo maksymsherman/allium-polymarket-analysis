@@ -29,18 +29,18 @@ export default function CompositionChart() {
       <p style={{ fontFamily: FONT, fontSize: 14, color: GRAY, marginBottom: 16 }}>
         Multi-outcome tokens outnumber binary 7:1, but represent roughly equal question counts.
       </p>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <p style={{ fontFamily: FONT, fontSize: 13, color: GRAY, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 8 }}>
             By token count
           </p>
           <ResponsiveContainer width="100%" height={160}>
-            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 64, bottom: 0, left: 0 }}>
+            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 56, bottom: 0, left: 0 }}>
               <XAxis type="number" hide />
-              <YAxis dataKey="label" type="category" width={100} tick={{ fontFamily: FONT, fontSize: 13, fill: BLACK }} axisLine={false} tickLine={false} />
+              <YAxis dataKey="label" type="category" width={90} tick={{ fontFamily: FONT, fontSize: 12, fill: BLACK }} axisLine={false} tickLine={false} />
               <Bar dataKey="tokens" maxBarSize={24} radius={0}>
                 {data.map((d, i) => <Cell key={i} fill={d.color} />)}
-                <LabelList dataKey="tokens" position="right" formatter={formatN} style={{ fontFamily: FONT, fontSize: 13, fill: BLACK }} />
+                <LabelList dataKey="tokens" position="right" formatter={formatN} style={{ fontFamily: FONT, fontSize: 12, fill: BLACK }} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -50,12 +50,12 @@ export default function CompositionChart() {
             By question count
           </p>
           <ResponsiveContainer width="100%" height={160}>
-            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 64, bottom: 0, left: 0 }}>
+            <BarChart data={data} layout="vertical" margin={{ top: 0, right: 56, bottom: 0, left: 0 }}>
               <XAxis type="number" hide />
-              <YAxis dataKey="label" type="category" width={100} tick={{ fontFamily: FONT, fontSize: 13, fill: BLACK }} axisLine={false} tickLine={false} />
+              <YAxis dataKey="label" type="category" width={90} tick={{ fontFamily: FONT, fontSize: 12, fill: BLACK }} axisLine={false} tickLine={false} />
               <Bar dataKey="questions" maxBarSize={24} radius={0}>
                 {data.map((d, i) => <Cell key={i} fill={d.color} />)}
-                <LabelList dataKey="questions" position="right" formatter={formatN} style={{ fontFamily: FONT, fontSize: 13, fill: BLACK }} />
+                <LabelList dataKey="questions" position="right" formatter={formatN} style={{ fontFamily: FONT, fontSize: 12, fill: BLACK }} />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
