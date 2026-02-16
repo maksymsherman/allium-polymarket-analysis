@@ -77,6 +77,7 @@ export default function CalibrationChart() {
             tick={TICK}
             axisLine={AXIS_LINE}
             tickLine={false}
+            label={{ value: "Actual outcome (%)", angle: -90, position: "insideLeft", offset: 4, fontFamily: FONT, fontSize: 13, fill: BLACK }}
           />
           <Tooltip content={<CustomTooltip />} />
 
