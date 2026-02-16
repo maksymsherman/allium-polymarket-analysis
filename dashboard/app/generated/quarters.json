@@ -1,0 +1,106 @@
+[
+  {
+    "quarter": "2023-Q1",
+    "binaryAcc": 68.3,
+    "multiAcc": null,
+    "binaryN": 65,
+    "multiN": 0,
+    "maxResolutionDate": "2023-03-31"
+  },
+  {
+    "quarter": "2023-Q2",
+    "binaryAcc": 76,
+    "multiAcc": null,
+    "binaryN": 80,
+    "multiN": 0,
+    "maxResolutionDate": "2023-06-30"
+  },
+  {
+    "quarter": "2023-Q3",
+    "binaryAcc": 76.8,
+    "multiAcc": null,
+    "binaryN": 85,
+    "multiN": 0,
+    "maxResolutionDate": "2023-09-30"
+  },
+  {
+    "quarter": "2023-Q4",
+    "binaryAcc": 68.5,
+    "multiAcc": null,
+    "binaryN": 97,
+    "multiN": 0,
+    "maxResolutionDate": "2023-12-30"
+  },
+  {
+    "quarter": "2024-Q1",
+    "binaryAcc": 80,
+    "multiAcc": 71.1,
+    "binaryN": 119,
+    "multiN": 76,
+    "maxResolutionDate": "2024-03-31"
+  },
+  {
+    "quarter": "2024-Q2",
+    "binaryAcc": 65.4,
+    "multiAcc": 75.7,
+    "binaryN": 164,
+    "multiN": 238,
+    "maxResolutionDate": "2024-06-30"
+  },
+  {
+    "quarter": "2024-Q3",
+    "binaryAcc": 70,
+    "multiAcc": 77.4,
+    "binaryN": 704,
+    "multiN": 579,
+    "maxResolutionDate": "2024-09-30"
+  },
+  {
+    "quarter": "2024-Q4",
+    "binaryAcc": 74,
+    "multiAcc": 76.1,
+    "binaryN": 856,
+    "multiN": 816,
+    "maxResolutionDate": "2024-12-31"
+  },
+  {
+    "quarter": "2025-Q1",
+    "binaryAcc": 72.8,
+    "multiAcc": 76.5,
+    "binaryN": 731,
+    "multiN": 973,
+    "maxResolutionDate": "2025-03-31"
+  },
+  {
+    "quarter": "2025-Q2",
+    "binaryAcc": 70.9,
+    "multiAcc": 77.9,
+    "binaryN": 1033,
+    "multiN": 1289,
+    "maxResolutionDate": "2025-06-30"
+  },
+  {
+    "quarter": "2025-Q3",
+    "binaryAcc": 80.2,
+    "multiAcc": 72.7,
+    "binaryN": 101,
+    "multiN": 2916,
+    "maxResolutionDate": "2025-09-30"
+  },
+  {
+    "quarter": "2025-Q4",
+    "binaryAcc": 61.1,
+    "multiAcc": 72.5,
+    "binaryN": 18,
+    "multiN": 6760,
+    "maxResolutionDate": "2025-12-31"
+  },
+  {
+    "quarter": "2026-Q1",
+    "binaryAcc": 66.7,
+    "multiAcc": 73.2,
+    "binaryN": 6,
+    "multiN": 4054,
+    "maxResolutionDate": "2026-02-15"
+  }
+]

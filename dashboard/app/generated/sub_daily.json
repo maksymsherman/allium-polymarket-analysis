@@ -1,0 +1,30 @@
+[
+  {
+    "horizon": "12h",
+    "marketType": "binary",
+    "nTokens": 6782,
+    "accuracyPct": 84.3,
+    "brierScore": 0.1072
+  },
+  {
+    "horizon": "12h",
+    "marketType": "multi_outcome",
+    "nTokens": 41370,
+    "accuracyPct": 87.9,
+    "brierScore": 0.0855
+  },
+  {
+    "horizon": "4h",
+    "marketType": "binary",
+    "nTokens": 8055,
+    "accuracyPct": 88.4,
+    "brierScore": 0.0802
+  },
+  {
+    "horizon": "4h",
+    "marketType": "multi_outcome",
+    "nTokens": 54451,
+    "accuracyPct": 94.3,
+    "brierScore": 0.0425
+  }
+]

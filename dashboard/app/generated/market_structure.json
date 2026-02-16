@@ -1,0 +1,25 @@
+{
+  "binary": {
+    "tokens": 13108,
+    "questions": 13108,
+    "tokensPerQ": 1.0
+  },
+  "multi": {
+    "tokens": 93876,
+    "questions": 13160,
+    "tokensPerQ": 7.1
+  },
+  "unknown": {
+    "tokens": 1877,
+    "questions": 1877
+  },
+  "total": {
+    "tokens": 108861,
+    "questions": 28145
+  },
+  "analysisTokens": {
+    "binary": 11328,
+    "multi": 68888,
+    "total": 80216
+  }
+}

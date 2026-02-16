@@ -1,0 +1,65 @@
+[
+  {
+    "category": "Sports",
+    "binaryAcc": 67.9,
+    "multiAcc": 72,
+    "binaryN": 779,
+    "multiN": 11091
+  },
+  {
+    "category": "Politics",
+    "binaryAcc": 72.1,
+    "multiAcc": 78.7,
+    "binaryN": 2012,
+    "multiN": 590
+  },
+  {
+    "category": "Crypto",
+    "binaryAcc": 78.7,
+    "multiAcc": 70.6,
+    "binaryN": 480,
+    "multiN": 2074
+  },
+  {
+    "category": "Other",
+    "binaryAcc": 70.5,
+    "multiAcc": 75,
+    "binaryN": 324,
+    "multiN": 1123
+  },
+  {
+    "category": "Weather",
+    "binaryAcc": 75,
+    "multiAcc": 87.6,
+    "binaryN": 9,
+    "multiN": 1333
+  },
+  {
+    "category": "Culture",
+    "binaryAcc": 76.5,
+    "multiAcc": 75.1,
+    "binaryN": 136,
+    "multiN": 1050
+  },
+  {
+    "category": "Business",
+    "binaryAcc": 70.3,
+    "multiAcc": 74.9,
+    "binaryN": 238,
+    "multiN": 318
+  },
+  {
+    "category": "Technology",
+    "binaryAcc": 81.7,
+    "multiAcc": 72.3,
+    "binaryN": 62,
+    "multiN": 115
+  },
+  {
+    "category": "International",
+    "binaryAcc": 57.1,
+    "multiAcc": 100,
+    "binaryN": 29,
+    "multiN": 7
+  }
+]

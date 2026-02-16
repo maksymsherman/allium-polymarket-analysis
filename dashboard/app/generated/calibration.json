@@ -1,0 +1,270 @@
+{
+  "binary": [
+    {
+      "bucket": "0\u20135%",
+      "midpoint": 2.5,
+      "winRate": 0.8,
+      "bias": 0.1,
+      "n": 4972,
+      "nQuestions": 4972,
+      "ciLo": 0.6,
+      "ciHi": 1.1,
+      "brierScore": 0.0078
+    },
+    {
+      "bucket": "5\u201310%",
+      "midpoint": 7.5,
+      "winRate": 6.9,
+      "bias": 0.3,
+      "n": 519,
+      "nQuestions": 519,
+      "ciLo": 4.8,
+      "ciHi": 9.1,
+      "brierScore": 0.0645
+    },
+    {
+      "bucket": "10\u201320%",
+      "midpoint": 15,
+      "winRate": 15.7,
+      "bias": 1.7,
+      "n": 650,
+      "nQuestions": 650,
+      "ciLo": 12.9,
+      "ciHi": 18.5,
+      "brierScore": 0.1315
+    },
+    {
+      "bucket": "20\u201330%",
+      "midpoint": 25,
+      "winRate": 25.7,
+      "bias": 1.5,
+      "n": 499,
+      "nQuestions": 499,
+      "ciLo": 21.8,
+      "ciHi": 29.5,
+      "brierScore": 0.1902
+    },
+    {
+      "bucket": "30\u201340%",
+      "midpoint": 35,
+      "winRate": 35.5,
+      "bias": 1.2,
+      "n": 504,
+      "nQuestions": 504,
+      "ciLo": 31.3,
+      "ciHi": 39.7,
+      "brierScore": 0.2277
+    },
+    {
+      "bucket": "40\u201350%",
+      "midpoint": 45,
+      "winRate": 47.8,
+      "bias": 3.2,
+      "n": 500,
+      "nQuestions": 500,
+      "ciLo": 43.4,
+      "ciHi": 52.2,
+      "brierScore": 0.2521
+    },
+    {
+      "bucket": "50\u201360%",
+      "midpoint": 55,
+      "winRate": 56.7,
+      "bias": 2.2,
+      "n": 402,
+      "nQuestions": 402,
+      "ciLo": 51.9,
+      "ciHi": 61.6,
+      "brierScore": 0.2465
+    },
+    {
+      "bucket": "60\u201370%",
+      "midpoint": 65,
+      "winRate": 67.9,
+      "bias": 3.4,
+      "n": 405,
+      "nQuestions": 405,
+      "ciLo": 63.4,
+      "ciHi": 72.4,
+      "brierScore": 0.2203
+    },
+    {
+      "bucket": "70\u201380%",
+      "midpoint": 75,
+      "winRate": 82.5,
+      "bias": 8.0,
+      "n": 428,
+      "nQuestions": 428,
+      "ciLo": 78.9,
+      "ciHi": 86.1,
+      "brierScore": 0.1507
+    },
+    {
+      "bucket": "80\u201390%",
+      "midpoint": 85,
+      "winRate": 84.8,
+      "bias": 0.4,
+      "n": 481,
+      "nQuestions": 481,
+      "ciLo": 81.6,
+      "ciHi": 88.0,
+      "brierScore": 0.1275
+    },
+    {
+      "bucket": "90\u201395%",
+      "midpoint": 92.5,
+      "winRate": 92.7,
+      "bias": 0.8,
+      "n": 330,
+      "nQuestions": 330,
+      "ciLo": 89.9,
+      "ciHi": 95.5,
+      "brierScore": 0.0683
+    },
+    {
+      "bucket": "95\u2013100%",
+      "midpoint": 97.5,
+      "winRate": 98.8,
+      "bias": -0.1,
+      "n": 1526,
+      "nQuestions": 1526,
+      "ciLo": 98.2,
+      "ciHi": 99.3,
+      "brierScore": 0.0121
+    }
+  ],
+  "multi": [
+    {
+      "bucket": "0\u20135%",
+      "midpoint": 2.5,
+      "winRate": 0.5,
+      "bias": -0.1,
+      "n": 42976,
+      "nQuestions": 8095,
+      "ciLo": 0.4,
+      "ciHi": 0.6,
+      "brierScore": 0.0048
+    },
+    {
+      "bucket": "5\u201310%",
+      "midpoint": 7.5,
+      "winRate": 5.6,
+      "bias": -1.1,
+      "n": 3130,
+      "nQuestions": 2386,
+      "ciLo": 4.8,
+      "ciHi": 6.4,
+      "brierScore": 0.0532
+    },
+    {
+      "bucket": "10\u201320%",
+      "midpoint": 15,
+      "winRate": 12.2,
+      "bias": -2.2,
+      "n": 4153,
+      "nQuestions": 3301,
+      "ciLo": 11.2,
+      "ciHi": 13.2,
+      "brierScore": 0.1067
+    },
+    {
+      "bucket": "20\u201330%",
+      "midpoint": 25,
+      "winRate": 24.4,
+      "bias": -0.2,
+      "n": 5163,
+      "nQuestions": 3962,
+      "ciLo": 23.2,
+      "ciHi": 25.5,
+      "brierScore": 0.1834
+    },
+    {
+      "bucket": "30\u201340%",
+      "midpoint": 35,
+      "winRate": 31.6,
+      "bias": -2.4,
+      "n": 2773,
+      "nQuestions": 2062,
+      "ciLo": 29.9,
+      "ciHi": 33.4,
+      "brierScore": 0.2161
+    },
+    {
+      "bucket": "40\u201350%",
+      "midpoint": 45,
+      "winRate": 38.8,
+      "bias": -5.4,
+      "n": 1951,
+      "nQuestions": 1855,
+      "ciLo": 36.6,
+      "ciHi": 41.0,
+      "brierScore": 0.2402
+    },
+    {
+      "bucket": "50\u201360%",
+      "midpoint": 55,
+      "winRate": 52.8,
+      "bias": -1.9,
+      "n": 1183,
+      "nQuestions": 1172,
+      "ciLo": 50.0,
+      "ciHi": 55.7,
+      "brierScore": 0.2483
+    },
+    {
+      "bucket": "60\u201370%",
+      "midpoint": 65,
+      "winRate": 62.4,
+      "bias": -1.7,
+      "n": 969,
+      "nQuestions": 961,
+      "ciLo": 59.4,
+      "ciHi": 65.5,
+      "brierScore": 0.2332
+    },
+    {
+      "bucket": "70\u201380%",
+      "midpoint": 75,
+      "winRate": 72,
+      "bias": -2.2,
+      "n": 667,
+      "nQuestions": 667,
+      "ciLo": 68.6,
+      "ciHi": 75.4,
+      "brierScore": 0.2024
+    },
+    {
+      "bucket": "80\u201390%",
+      "midpoint": 85,
+      "winRate": 84,
+      "bias": -0.1,
+      "n": 555,
+      "nQuestions": 554,
+      "ciLo": 80.9,
+      "ciHi": 87.0,
+      "brierScore": 0.1355
+    },
+    {
+      "bucket": "90\u201395%",
+      "midpoint": 92.5,
+      "winRate": 90.8,
+      "bias": -1.5,
+      "n": 346,
+      "nQuestions": 343,
+      "ciLo": 87.7,
+      "ciHi": 93.8,
+      "brierScore": 0.0839
+    },
+    {
+      "bucket": "95\u2013100%",
+      "midpoint": 97.5,
+      "winRate": 98.9,
+      "bias": -0.5,
+      "n": 4804,
+      "nQuestions": 4784,
+      "ciLo": 98.6,
+      "ciHi": 99.2,
+      "brierScore": 0.0104
+    }
+  ]
+}
