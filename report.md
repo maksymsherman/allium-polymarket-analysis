@@ -25,14 +25,14 @@ Multi-outcome questions range from 3 outcomes (the most common, with 6,971 quest
 
 ## Binary markets: well-calibrated, slightly underpriced
 
-Isolating the 11,296 binary tokens with a strict day-before price produces a clean calibration picture — each observation is genuinely independent:
+Isolating the 11,328 binary tokens with a strict day-before price produces a clean calibration picture — each observation is genuinely independent:
 
 | Market Price | Actual Win Rate | Bias | N | 95% CI |
 |---|---|---|---|---|
-| 0–5% | 0.8% | +0.1 pp | 4,945 | [0.6%, 1.1%] |
-| 5–10% | 7.0% | +0.3 pp | 517 | [4.8%, 9.2%] |
-| 10–20% | 15.7% | +1.7 pp | 649 | [12.9%, 18.5%] |
-| 20–30% | 25.7% | +1.5 pp | 498 | [21.9%, 29.5%] |
+| 0–5% | 0.8% | +0.1 pp | 4,972 | [0.6%, 1.1%] |
+| 5–10% | 6.9% | +0.3 pp | 519 | [4.8%, 9.1%] |
+| 10–20% | 15.7% | +1.7 pp | 650 | [12.9%, 18.5%] |
+| 20–30% | 25.7% | +1.5 pp | 499 | [21.8%, 29.5%] |
 | 30–40% | 35.5% | +1.2 pp | 504 | [31.3%, 39.7%] |
 | 40–50% | 47.8% | +3.2 pp | 500 | [43.4%, 52.2%] |
 | 50–60% | 56.7% | +2.2 pp | 402 | [51.9%, 61.6%] |
@@ -40,7 +40,7 @@ Isolating the 11,296 binary tokens with a strict day-before price produces a cle
 | 70–80% | 82.5% | **+8.0 pp** | 428 | [78.9%, 86.1%] |
 | 80–90% | 84.8% | +0.4 pp | 481 | [81.6%, 88.0%] |
 | 90–95% | 92.7% | +0.8 pp | 330 | [89.9%, 95.5%] |
-| 95–100% | 98.8% | −0.1 pp | 1,525 | [98.2%, 99.3%] |
+| 95–100% | 98.8% | −0.1 pp | 1,526 | [98.2%, 99.3%] |
 
 Almost every bucket shows **positive** bias — events happen slightly *more* often than prices predict. The 70–80% bucket is the most underpriced (+8.0pp): a market priced at 75 cents actually resolves Yes about 83% of the time. There is no longshot bias in binary markets. If anything, participants slightly underpay for likely outcomes.
 
@@ -48,24 +48,24 @@ Blending these with multi-outcome tokens obscures this picture entirely. The "sy
 
 ## Multi-outcome markets: moderate overpricing, correlated data
 
-The 65,145 multi-outcome tokens show mild negative bias:
+The 68,888 multi-outcome tokens show mild negative bias:
 
 | Market Price | Actual Win Rate | Bias | N |
 |---|---|---|---|
-| 0–5% | 0.5% | −0.1 pp | 40,605 |
-| 5–10% | 6.5% | −0.3 pp | 3,047 |
-| 10–20% | 12.2% | −2.2 pp | 3,958 |
-| 20–30% | 24.6% | **0.0 pp** | 4,874 |
-| 30–40% | 31.5% | −2.5 pp | 2,612 |
-| 40–50% | 38.8% | **−5.4 pp** | 1,846 |
-| 50–60% | 52.4% | −2.4 pp | 1,096 |
-| 60–70% | 62.7% | −2.0 pp | 755 |
-| 70–80% | 72.4% | −1.8 pp | 626 |
-| 80–90% | 83.1% | −1.5 pp | 740 |
-| 90–95% | 92.5% | −0.2 pp | 712 |
-| 95–100% | 98.4% | −1.0 pp | 4,550 |
+| 0–5% | 0.5% | −0.1 pp | 42,976 |
+| 5–10% | 5.6% | −1.1 pp | 3,130 |
+| 10–20% | 12.2% | −2.2 pp | 4,153 |
+| 20–30% | 24.4% | −0.2 pp | 5,163 |
+| 30–40% | 31.6% | −2.4 pp | 2,773 |
+| 40–50% | 38.8% | **−5.4 pp** | 1,951 |
+| 50–60% | 52.8% | −1.9 pp | 1,183 |
+| 60–70% | 62.4% | −1.7 pp | 969 |
+| 70–80% | 72.0% | −2.2 pp | 667 |
+| 80–90% | 84.0% | −0.1 pp | 555 |
+| 90–95% | 90.8% | −1.5 pp | 346 |
+| 95–100% | 98.9% | −0.5 pp | 4,804 |
 
-The worst bucket is 40–50% at −5.4pp — meaningful but modest. The 20–30% range is perfectly calibrated (0.0pp bias).
+The worst bucket is 40–50% at −5.4pp — meaningful but modest. The 20–30% range is essentially calibrated (−0.2pp bias).
 
 These observations are **not independent**. Multiple tokens from the same question move together. The effective sample size is closer to the 13,160 distinct questions than the 65,145 token count, so the statistical confidence these sample sizes imply is overstated.
 
@@ -88,22 +88,22 @@ Competitive accuracy (10–90% price range) by category and market type:
 
 | Category | Binary Comp. Acc. | Multi-outcome Comp. Acc. | Binary N | Multi-outcome N |
 |---|---|---|---|---|
-| Sports | 67.9% | 72.0% | 778 | 10,448 |
-| Politics | 72.1% | 78.4% | 2,012 | 577 |
-| Crypto | 78.7% | 70.5% | 480 | 1,987 |
-| Culture | 76.3% | 75.2% | 135 | 1,007 |
-| Weather | 75.0% | 87.8% | 9 | 1,205 |
-| Business | 70.3% | 74.2% | 238 | 298 |
-| Technology | 81.7% | 71.2% | 62 | 114 |
+| Sports | 67.9% | 72.0% | 779 | 11,091 |
+| Politics | 72.1% | 78.7% | 2,012 | 590 |
+| Crypto | 78.7% | 70.6% | 480 | 2,074 |
+| Culture | 76.5% | 75.1% | 136 | 1,050 |
+| Weather | 75.0% | 87.6% | 9 | 1,333 |
+| Business | 70.3% | 74.9% | 238 | 318 |
+| Technology | 81.7% | 72.3% | 62 | 115 |
 
-Sports binary markets are the hardest to predict (67.9%), consistent with sports being genuinely uncertain at the competitive margin. Weather multi-outcome markets are the easiest (87.8%) — weather has well-understood probability distributions and likely attracts less noisy speculation.
+Sports binary markets are the hardest to predict (67.9%), consistent with sports being genuinely uncertain at the competitive margin. Weather multi-outcome markets are the easiest (87.6%) — weather has well-understood probability distributions and likely attracts less noisy speculation.
 
 ## Coverage gaps
 
-Of the 108,861 resolved tokens, 24,403 (~22%) lack a day-before price and are excluded from the calibration analysis. These are not randomly distributed:
+Of the 108,861 resolved tokens, 28,645 (~26%) lack a day-before price or have unknown market type and are excluded from the calibration analysis. These are not randomly distributed:
 
-- **92% are multi-outcome tokens** — thin markets where no trade occurred on the day before resolution
-- Their win rate is **9.1%**, far below the dataset average — most are longshot outcomes in sparsely-traded multi-candidate questions
+- **93% are multi-outcome tokens** — thin markets where no trade occurred on the day before resolution
+- Most are longshot outcomes in sparsely-traded multi-candidate questions
 
 Excluding them likely has minimal impact on calibration in the competitive range, but the gap is worth noting.
 
@@ -120,7 +120,7 @@ Polymarket's prices contain real information. Binary markets are impressively we
 
 ## Methodology
 
-**Data**: On-chain records from Polygon via [Allium](https://www.allium.so/), covering 108,861 resolved Yes tokens across ~28,145 actual questions from January 2022 to February 2026. After filtering to tokens with a strict day-before price, 76,441 tokens remain (11,296 binary + 65,145 multi-outcome). An additional 1,877 tokens with unknown market type (`NEG_RISK = NULL`) are excluded from type-specific analysis.
+**Data**: On-chain records from Polygon via [Allium](https://www.allium.so/), covering 108,861 resolved Yes tokens across ~28,145 actual questions from January 2022 to February 2026. After filtering to tokens with a strict day-before price and known market type, 80,216 tokens remain (11,328 binary + 68,888 multi-outcome). An additional 1,877 tokens with unknown market type (`NEG_RISK = NULL`) are excluded from type-specific analysis.
 
 **Market type identification**: Binary markets (`NEG_RISK = false`) yield one token per question (13,108 independent observations). Multi-outcome markets (`NEG_RISK = true`) yield multiple correlated tokens per question (93,876 tokens across 13,160 questions). Tokens are grouped into questions using `market_id` for multi-outcome markets and `condition_id` for binary markets.
 

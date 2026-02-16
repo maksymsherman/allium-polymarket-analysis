@@ -48,38 +48,38 @@ Polymarket has two market types, distinguished by the `NEG_RISK` flag:
 
 ### Key Finding: Binary Markets Are Well-Calibrated
 
-Binary market calibration (11,296 tokens, strict day-before price):
+Binary market calibration (11,328 tokens, strict day-before price):
 
 | Implied Prob | Actual Win Rate | Bias (pp) | N | 95% CI |
 |---|---|---|---|---|
-| 0-5% | 0.8% | +0.1 | 4,945 | [0.6%, 1.1%] |
-| 10-20% | 15.7% | +1.7 | 649 | [12.9%, 18.5%] |
-| 20-30% | 25.7% | +1.5 | 498 | [21.9%, 29.5%] |
+| 0-5% | 0.8% | +0.1 | 4,972 | [0.6%, 1.1%] |
+| 10-20% | 15.7% | +1.7 | 650 | [12.9%, 18.5%] |
+| 20-30% | 25.7% | +1.5 | 499 | [21.8%, 29.5%] |
 | 40-50% | 47.8% | +3.2 | 500 | [43.4%, 52.2%] |
 | 70-80% | 82.5% | **+8.0** | 428 | [78.9%, 86.1%] |
-| 95-100% | 98.8% | -0.1 | 1,525 | [98.2%, 99.3%] |
+| 95-100% | 98.8% | -0.1 | 1,526 | [98.2%, 99.3%] |
 
 **Positive bias throughout** — events happen slightly more than prices predict. No longshot bias. The v1 "systematic overpricing" was an artifact of mixing market types.
 
-### Multi-outcome Calibration (65,145 tokens)
+### Multi-outcome Calibration (68,888 tokens)
 
 | Implied Prob | Actual Win Rate | Bias (pp) | N |
 |---|---|---|---|
-| 0-5% | 0.5% | -0.1 | 40,605 |
-| 20-30% | 24.6% | **0.0** | 4,874 |
-| 40-50% | 38.8% | **-5.4** | 1,846 |
-| 95-100% | 98.4% | -1.0 | 4,550 |
+| 0-5% | 0.5% | -0.1 | 42,976 |
+| 20-30% | 24.4% | -0.2 | 5,163 |
+| 40-50% | 38.8% | **-5.4** | 1,951 |
+| 95-100% | 98.9% | -0.5 | 4,804 |
 
-Moderate negative bias. Worst bucket 40-50% at -5.4pp (vs v1's -8.1pp in 20-30%). The former "worst offender" (20-30%) is now perfectly calibrated.
+Moderate negative bias. Worst bucket 40-50% at -5.4pp (vs v1's -8.1pp in 20-30%). The former "worst offender" (20-30%) is now essentially calibrated.
 
 ### Category Breakdown
 
 | Category | Binary Comp. Acc. | Multi-outcome Comp. Acc. | Binary N | Multi N |
 |---|---|---|---|---|
-| Sports | 67.9% | 72.0% | 778 | 10,448 |
-| Politics | 72.1% | 78.4% | 2,012 | 577 |
-| Crypto | 78.7% | 70.5% | 480 | 1,987 |
-| Weather | 75.0% | 87.8% | 9 | 1,205 |
+| Sports | 67.9% | 72.0% | 779 | 11,091 |
+| Politics | 72.1% | 78.7% | 2,012 | 590 |
+| Crypto | 78.7% | 70.6% | 480 | 2,074 |
+| Weather | 75.0% | 87.6% | 9 | 1,333 |
 
 ---
 
@@ -90,7 +90,7 @@ Moderate negative bias. Worst bucket 40-50% at -5.4pp (vs v1's -8.1pp in 20-30%)
 2. Resolution-day price inclusion inflated accuracy numbers
 3. Price = 0.50 edge case was silently miscounted
 4. Calibration curve lacked confidence intervals and had uneven bucket widths
-5. ~24K tokens dropped without investigation (mostly low-activity multi-outcome tokens, 9.1% win rate)
+5. ~29K tokens dropped without investigation (mostly low-activity multi-outcome tokens)
 6. Sub-daily results used a different data source without disclosure
 7. Query 07 (asymmetric bias) was filler
 
