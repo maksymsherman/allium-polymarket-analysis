@@ -80,10 +80,10 @@ export default function Home() {
       {/* Header */}
       <header className="mb-10">
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-          Polymarket&rsquo;s Binary Markets Are Well-Calibrated. The &ldquo;92% Accuracy&rdquo; Headline Isn&rsquo;t.
+          Polymarket&rsquo;s Binary Markets Are Well-Calibrated. Here&rsquo;s What &ldquo;92% Accuracy&rdquo; Misses.
         </h1>
         <p className="text-base text-gray-500 mt-2 max-w-2xl">
-          Binary yes/no markets track reality. Multi-outcome markets inflate the headline stat. Here&rsquo;s the on-chain data.
+          Binary yes/no markets track reality. Multi-outcome markets complicate the headline stat. Here&rsquo;s the on-chain data.
         </p>
         <div className="flex items-center gap-4 mt-3">
           <Link href="/report" className="text-sm text-gray-500 underline hover:text-gray-700">
@@ -161,7 +161,7 @@ export default function Home() {
           <li className="flex gap-2">
             <span className="text-blue-600 font-bold mt-0.5 shrink-0">3.</span>
             <span>
-              <strong>The &ldquo;92% accuracy&rdquo; headline is a denominator problem.</strong> Like
+              <strong>The &ldquo;92% accuracy&rdquo; headline tells an incomplete story.</strong> Like
               crediting a forecaster for predicting no snow in Phoenix in July — near-certain outcomes
               dominate the count.
             </span>

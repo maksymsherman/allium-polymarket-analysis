@@ -15,9 +15,9 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title:
-    "Polymarket's Binary Markets Are Well-Calibrated. The '92% Accuracy' Headline Isn't.",
+    "Polymarket's Binary Markets Are Well-Calibrated. Here's What '92% Accuracy' Misses.",
   description:
-    "Binary yes/no markets track reality. Multi-outcome markets inflate the headline stat. On-chain calibration analysis of 108K resolved tokens.",
+    "Binary yes/no markets track reality. Multi-outcome markets complicate the headline stat. On-chain calibration analysis of 108K resolved tokens.",
 };
 
 export default function RootLayout({

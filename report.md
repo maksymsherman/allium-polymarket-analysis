@@ -1,4 +1,4 @@
-# Polymarket's Binary Markets Are Well-Calibrated. The "92% Accuracy" Headline Isn't.
+# Polymarket's Binary Markets Are Well-Calibrated. Here's What "92% Accuracy" Misses.
 
 *An on-chain analysis of 108,861 resolved tokens across ~28,145 questions*
 
@@ -46,7 +46,7 @@ Tails: 0–10% resolves at ~0.5–6%, 90–100% at ~91–99%.
 
 The worst bucket is 40–50% at −5.4pp — a token priced at 45 cents wins just 39% of the time. The effect is real but bounded. These observations are **not independent**: multiple tokens from the same question move together, so the effective sample size is closer to 13,160 distinct questions than the 68,888 token count.
 
-## Why "92% accuracy" is the wrong number
+## What "92% accuracy" leaves out
 
 Most of that headline stat comes from near-certain outcomes. About 75% of multi-outcome tokens fall in the tails (<10% or >90%), compared to ~54% for binary. A 30-candidate field guarantees ~29 tokens below 10% — all "correct" when they lose.
 
@@ -72,7 +72,7 @@ Sports binary markets are the hardest to predict (67.9%) — consistent with spo
 
 - **Binary markets are well-calibrated.** Prices track reality across probability ranges, with no longshot bias. The price is a reliable probability estimate — slightly conservative, if anything.
 - **Multi-outcome markets overprice by 3–5pp in the competitive range.** The effect is real but bounded, and within-question correlation means statistical confidence is lower than raw counts suggest.
-- **The "92% accuracy" headline is a denominator problem.** Near-certain outcomes pad the count — structurally so in multi-outcome markets.
+- **The "92% accuracy" headline tells an incomplete story.** Near-certain outcomes pad the count — structurally so in multi-outcome markets.
 - **Binary and multi-outcome markets have opposite biases.** Binary prices slightly underestimate event probability; multi-outcome prices slightly overestimate it. Mixing them creates an artifact.
 
 Polymarket's prices contain real information. Binary markets are impressively well-calibrated. But evaluating a probability forecaster by binary hit rate is like evaluating a chess engine by how often it beats beginners — the metric is real, it's just not measuring what you think it's measuring.
